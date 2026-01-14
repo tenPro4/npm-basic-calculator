@@ -1,0 +1,42 @@
+name: CI/CD - Auto Publish Package
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'package.json' # 只有 package.json 变动时才尝试发布，节省资源
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write # 必须开启写入权限
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@tenPro4'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build package
+        run: npm run build
+
+      - name: Check if version exists and Publish
+        run: |
+          # 获取当前 package.json 里的版本号
+          VERSION=$(node -p "require('./package.json').version")
+          
+          # 尝试发布。如果版本已存在，npm 会报错，我们用 || 让它静默退出
+          npm publish || echo "Version $VERSION already exists. Skipping publish."
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # 自动使用 GitHub 提供的临时 Token
