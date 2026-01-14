@@ -33,10 +33,9 @@ jobs:
 
       - name: Check if version exists and Publish
         run: |
-          # 获取当前 package.json 里的版本号
           VERSION=$(node -p "require('./package.json').version")
           
-          # 尝试发布。如果版本已存在，npm 会报错，我们用 || 让它静默退出
           npm publish || echo "Version $VERSION already exists. Skipping publish."
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # 自动使用 GitHub 提供的临时 Token
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
