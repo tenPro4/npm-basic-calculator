@@ -1,30 +1,30 @@
 {
-  "name": "npm-basic-calculator",
+  "name": "@tenPro4/npm-basic-calculator",
   "version": "1.0.0",
   "type": "module",
-
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
       "types": "./dist/index.d.mts"
     }
   },
-
-  "files": ["dist"],
-
+  "files": [
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tenPro4/npm-basic-calculator.git"
   },
-
   "scripts": {
     "build": "tsdown",
+    "release": "npm version patch && git push --follow-tags && npm run deploy",
+    "deploy": "dotenv -- npm publish",
     "dev": "tsdown --watch",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run build"
   },
-
   "devDependencies": {
+    "dotenv-cli": "^11.0.0",
     "tsdown": "^0.20.0-beta.2",
     "typescript": "^5.9.3"
   }
