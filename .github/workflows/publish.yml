@@ -37,5 +37,4 @@ jobs:
           
           npm publish || echo "Version $VERSION already exists. Skipping publish."
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
